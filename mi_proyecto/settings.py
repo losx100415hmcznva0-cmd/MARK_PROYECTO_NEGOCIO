@@ -18,11 +18,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-@z8z7+x_j1-py*i3&(@(cyi850l!r!^-gmsd!ozo%uwbf&tt*8')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# Cambiado a False usando una variable de entorno con respaldo a False para mayor seguridad
 DEBUG = os.environ.get('DJANGO_DEBUG', 'False').lower() == 'true'
 
 # Permitir el dominio de Render y localhost para desarrollo
 ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
+
+# Dominios de confianza para formularios y Login en producción
+CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com']
 
 # Si Render te proporciona un hostname exacto por variable de entorno, lo incluye automáticamente
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
@@ -57,7 +59,7 @@ ROOT_URLCONF = 'mi_proyecto.urls'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.DjangoTemplates',
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',  # <-- CORREGIDO
         'DIRS': [BASE_DIR / 'templates'],  # Ruta a la carpeta templates de la raíz
         'APP_DIRS': True,
         'OPTIONS': {
