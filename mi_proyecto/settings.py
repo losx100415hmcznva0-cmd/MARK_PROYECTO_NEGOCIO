@@ -123,16 +123,18 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-# Ruta donde se recolectarán los archivos estáticos al ejecutar 'python manage.py collectstatic'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
+
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Configuración del almacenamiento estático de WhiteNoise con compresión
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
 
