@@ -53,24 +53,10 @@ def eliminar_categoria(request, pk):
         return redirect('lista_categorias')
     return render(request, 'tienda/categorias/eliminar.html', {'categoria': categoria})
 
-# PRODUCTOS (CRUD + Búsqueda y Filtro UX 3.4)
+# PRODUCTOS (CRUD)
 def lista_productos(request):
     productos = Producto.objects.all()
-    categorias = Categoria.objects.all()
-    query = request.GET.get('q', '')
-    categoria_id = request.GET.get('categoria', '')
-
-    if query:
-        productos = productos.filter(nombre__icontains=query)
-    if categoria_id:
-        productos = productos.filter(categoria_id=categoria_id)
-
-    return render(request, 'tienda/productos/lista.html', {
-        'productos': productos,
-        'categorias': categorias,
-        'query': query,
-        'categoria_id': categoria_id
-    })
+    return render(request, 'tienda/productos/lista.html', {'productos': productos})
 
 @login_required
 def crear_producto(request):

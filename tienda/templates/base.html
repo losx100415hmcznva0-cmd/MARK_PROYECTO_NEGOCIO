@@ -4,52 +4,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Papelería El Lápiz Azul - Sistema de Gestión{% endblock %}</title>
-    <!-- Tipografías de la Parte 2: Plus Jakarta Sans y Nunito Sans -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
-    <!-- Hoja de estilos principal -->
+    <title>{% block title %}Papelería Arte y Papel{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <header class="site-header">
-        <h1><a href="{% url 'inicio' %}" class="logo">Papelería El Lápiz Azul</a></h1>
-        <nav>
-            <a href="{% url 'inicio' %}">Inicio</a>
-            <a href="{% url 'lista_productos' %}">Productos</a>
-            <a href="{% url 'lista_categorias' %}">Categorías</a>
-            <a href="{% url 'lista_clientes' %}">Clientes</a>
+    <nav class="navbar">
+        <a href="{% url 'inicio' %}" class="navbar-brand">✏️ Papelería Arte y Papel</a>
+        <ul class="navbar-nav">
+            <li><a href="{% url 'inicio' %}">Inicio</a></li>
+            <li><a href="{% url 'lista_productos' %}">Productos</a></li>
+            <li><a href="{% url 'lista_categorias' %}">Categorías</a></li>
             {% if user.is_authenticated %}
-                <a href="{% url 'dashboard' %}">Dashboard</a>
-                <span class="user-greeting">Hola, {{ user.username }}</span>
-                <form action="{% url 'logout' %}" method="post" class="logout-form">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">Cerrar sesión</button>
-                </form>
+                <li><a href="{% url 'lista_clientes' %}">Clientes</a></li>
+                <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li>
+                    <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-logout">Cerrar Sesión ({{ user.username }})</button>
+                    </form>
+                </li>
             {% else %}
-                <a href="{% url 'login' %}" class="btn btn-secondary-accent">Iniciar sesión</a>
+                <li><a href="{% url 'login' %}" class="btn-login">Iniciar Sesión</a></li>
             {% endif %}
-        </nav>
-    </header>
-
+        </ul>
+    </nav>
 
     <main class="container">
         {% if messages %}
             <ul class="messages">
                 {% for message in messages %}
-                    <li class="message {{ message.tags }}">{{ message }}</li>
+                    <li class="{{ message.tags }}">{{ message }}</li>
                 {% endfor %}
             </ul>
         {% endif %}
 
-
         {% block content %}{% endblock %}
     </main>
 
-
-    <footer class="site-footer">
-        <p>Papelería El Lápiz Azul — Software que Crece con tu Negocio &copy; {% now "Y" %}</p>
+    <footer>
+        <p>&copy; 2026 Papelería Arte y Papel — Sistema de Gestión e Inventario</p>
     </footer>
 </body>
 </html>

@@ -13,23 +13,6 @@
     </a>
 </div>
 
-<!-- Barra de búsqueda y filtro (Mejora UX 3.4) -->
-<form method="get" class="card" style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; margin-bottom: 1.5rem;">
-    <input type="text" name="q" value="{{ query }}" placeholder="Buscar cuaderno, pluma, lápiz..." class="form-control" style="flex: 2; margin-bottom: 0;">
-    <select name="categoria" class="form-control" style="flex: 1; margin-bottom: 0;">
-        <option value="">Todas las categorías</option>
-        {% for cat in categorias %}
-            <option value="{{ cat.pk }}" {% if categoria_id == cat.pk|stringformat:"s" %}selected{% endif %}>
-                {{ cat.nombre }}
-            </option>
-        {% endfor %}
-    </select>
-    <button type="submit" class="btn btn-primary">Buscar</button>
-    {% if query or categoria_id %}
-        <a href="{% url 'lista_productos' %}" class="btn" style="background: #64748b;">Limpiar</a>
-    {% endif %}
-</form>
-
 {% if productos %}
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.25rem;">
         {% for producto in productos %}
@@ -58,15 +41,9 @@
     </div>
 {% else %}
     <div class="card" style="text-align: center; padding: 3rem 1rem;">
-        {% if query or categoria_id %}
-            <h3 style="color: #64748b; margin-bottom: 0.5rem;">No se encontraron artículos con esa búsqueda</h3>
-            <p style="color: #94a3b8; margin-bottom: 1.5rem;">Intenta con otra palabra clave o limpia los filtros aplicados.</p>
-            <a href="{% url 'lista_productos' %}" class="btn btn-primary">Ver todos los productos</a>
-        {% else %}
-            <h3 style="color: #64748b; margin-bottom: 0.5rem;">No hay registros aún en el catálogo</h3>
-            <p style="color: #94a3b8; margin-bottom: 1.5rem;">Comienza agregando cuadernos, lápices, plumas o material de arte.</p>
-            <a href="{% url 'crear_producto' %}" class="btn btn-primary">Registrar primer producto</a>
-        {% endif %}
+        <h3 style="color: #64748b; margin-bottom: 0.5rem;">No hay registros aún en el catálogo</h3>
+        <p style="color: #94a3b8; margin-bottom: 1.5rem;">Comienza agregando cuadernos, lápices, plumas o material de arte.</p>
+        <a href="{% url 'crear_producto' %}" class="btn btn-primary">Registrar primer producto</a>
     </div>
 {% endif %}
 {% endblock %}

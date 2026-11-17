@@ -4,28 +4,28 @@
 
 {% block content %}
 <div class="card" style="max-width: 420px; margin: 3rem auto; border-top: 5px solid var(--color-primary);">
-    <h2 style="text-align: center; color: var(--color-primary); margin-bottom: 0.5rem;">Papelería Arte y Papel</h2>
-    <p style="text-align: center; color: #64748b; margin-bottom: 1.5rem; font-size: 0.9rem;">Ingresa tus credenciales de acceso al punto de venta</p>
+    <div style="text-align: center; margin-bottom: 1.5rem;">
+        <h2 style="color: var(--color-primary); margin-bottom: 0.3rem;">Acceso al Sistema</h2>
+        <p style="color: #64748b; font-size: 0.9rem;">Papelería Arte y Papel — Panel Administrativo</p>
+    </div>
 
     {% if form.errors %}
-        <div class="messages">
-            <div class="error">Usuario o contraseña incorrectos. Verifica tus datos.</div>
+        <div style="background: #FEE2E2; color: #991B1B; padding: 0.75rem; border-radius: 6px; margin-bottom: 1rem; font-size: 0.9rem; text-align: center;">
+            Usuario o contraseña incorrectos. Inténtalo de nuevo.
         </div>
     {% endif %}
 
     <form method="post">
         {% csrf_token %}
-        <p>
-            <label for="id_username">Usuario:</label>
-            <input type="text" name="username" id="id_username" class="form-control" placeholder="Ej. Mark_XLV" required autofocus>
+        <p style="margin-bottom: 1rem;">
+            <label for="id_username" style="font-weight: bold; display: block; margin-bottom: 0.3rem;">Usuario</label>
+            <input type="text" name="username" id="id_username" class="form-control" required autofocus>
         </p>
-        <p>
-            <label for="id_password">Contraseña:</label>
-            <input type="password" name="password" id="id_password" class="form-control" placeholder="••••••••" required>
+        <p style="margin-bottom: 1.5rem;">
+            <label for="id_password" style="font-weight: bold; display: block; margin-bottom: 0.3rem;">Contraseña</label>
+            <input type="password" name="password" id="id_password" class="form-control" required>
         </p>
-        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem; font-size: 1rem;">
-            Entrar al Sistema
-        </button>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Ingresar</button>
     </form>
 </div>
 {% endblock %}
