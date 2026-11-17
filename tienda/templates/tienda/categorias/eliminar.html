@@ -1,13 +1,24 @@
 {% extends 'base.html' %}
-{% block title %}Eliminar Categoría{% endblock %}
+
+{% block title %}Confirmar Eliminación — Papelería Arte y Papel{% endblock %}
+
 {% block content %}
-<div class="card">
-    <h2>¿Eliminar categoría?</h2>
-    <p>¿Estás seguro de eliminar "<strong>{{ categoria.nombre }}</strong>"?</p>
-    <form method="post">
+<div class="card" style="max-width: 500px; margin: 2rem auto; border-top: 5px solid #DC2626; text-align: center;">
+    <h2 style="color: #DC2626; margin-bottom: 0.75rem;">⚠️ Confirmar Eliminación</h2>
+    <p style="margin-bottom: 1rem;">
+        ¿Estás seguro de que deseas eliminar permanentemente el siguiente registro de <strong>Papelería Arte y Papel</strong>?
+    </p>
+    <div style="background: #FEE2E2; color: #991B1B; padding: 0.75rem; border-radius: var(--radius); font-weight: bold; margin-bottom: 1.5rem;">
+        "{{ object }}"
+    </div>
+    <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.5rem;">
+        Esta acción no se puede deshacer y el artículo desaparecerá del inventario.
+    </p>
+
+    <form method="post" style="display: flex; justify-content: center; gap: 1rem;">
         {% csrf_token %}
-        <button type="submit" class="btn btn-danger">Sí, eliminar</button>
-        <a href="{% url 'lista_categorias' %}" class="btn btn-secondary">Cancelar</a>
+        <button type="submit" class="btn btn-danger">Sí, Eliminar</button>
+        <a href="javascript:history.back()" class="btn" style="background: #64748b;">Cancelar</a>
     </form>
 </div>
 {% endblock %}

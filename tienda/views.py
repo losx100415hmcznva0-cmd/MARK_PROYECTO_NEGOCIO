@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count, Sum
 from .models import Categoria, Producto, Cliente
 from .forms import CategoriaForm, ProductoForm, ClienteForm
 
@@ -52,10 +53,24 @@ def eliminar_categoria(request, pk):
         return redirect('lista_categorias')
     return render(request, 'tienda/categorias/eliminar.html', {'categoria': categoria})
 
-# PRODUCTOS (CRUD)
+# PRODUCTOS (CRUD + Búsqueda y Filtro UX 3.4)
 def lista_productos(request):
     productos = Producto.objects.all()
-    return render(request, 'tienda/productos/lista.html', {'productos': productos})
+    categorias = Categoria.objects.all()
+    query = request.GET.get('q', '')
+    categoria_id = request.GET.get('categoria', '')
+
+    if query:
+        productos = productos.filter(nombre__icontains=query)
+    if categoria_id:
+        productos = productos.filter(categoria_id=categoria_id)
+
+    return render(request, 'tienda/productos/lista.html', {
+        'productos': productos,
+        'categorias': categorias,
+        'query': query,
+        'categoria_id': categoria_id
+    })
 
 @login_required
 def crear_producto(request):
@@ -130,41 +145,37 @@ def eliminar_cliente(request, pk):
         messages.success(request, 'Cliente eliminado correctamente.')
         return redirect('lista_clientes')
     return render(request, 'tienda/clientes/eliminar.html', {'cliente': cliente})
-from django.contrib.auth.decorators import login_required
-from django.db.models import Count, Sum
-from django.shortcuts import render
-from .models import Categoria, Cliente, Producto
 
-
+# DASHBOARD
 @login_required
 def dashboard(request):
-  total_categorias = Categoria.objects.count()
-  total_productos = Producto.objects.count()
-  total_clientes = Cliente.objects.count()
-  productos_activos = Producto.objects.filter(activo=True).count()
-  productos_sin_stock = Producto.objects.filter(stock=0).count()
+    total_categorias = Categoria.objects.count()
+    total_productos = Producto.objects.count()
+    total_clientes = Cliente.objects.count()
+    productos_activos = Producto.objects.filter(activo=True).count()
+    productos_sin_stock = Producto.objects.filter(stock=0).count()
 
-  # Valor total del inventario
-  valor_inventario = (
-      Producto.objects.aggregate(total=Sum('precio'))['total'] or 0
-  )
+    # Valor total del inventario
+    valor_inventario = (
+        Producto.objects.aggregate(total=Sum('precio'))['total'] or 0
+    )
 
-  # Últimos 5 productos creados
-  ultimos_productos = Producto.objects.order_by('-id')[:5]
+    # Últimos 5 productos creados
+    ultimos_productos = Producto.objects.order_by('-id')[:5]
 
-  # Productos por categoría
-  por_categoria = Categoria.objects.annotate(
-      num_productos=Count('producto')
-  ).order_by('-num_productos')
+    # Productos por categoría
+    por_categoria = Categoria.objects.annotate(
+        num_productos=Count('producto')
+    ).order_by('-num_productos')
 
-  context = {
-      'total_categorias': total_categorias,
-      'total_productos': total_productos,
-      'total_clientes': total_clientes,
-      'productos_activos': productos_activos,
-      'productos_sin_stock': productos_sin_stock,
-      'valor_inventario': valor_inventario,
-      'ultimos_productos': ultimos_productos,
-      'por_categoria': por_categoria,
-  }
-  return render(request, 'tienda/dashboard.html', context)
+    context = {
+        'total_categorias': total_categorias,
+        'total_productos': total_productos,
+        'total_clientes': total_clientes,
+        'productos_activos': productos_activos,
+        'productos_sin_stock': productos_sin_stock,
+        'valor_inventario': valor_inventario,
+        'ultimos_productos': ultimos_productos,
+        'por_categoria': por_categoria,
+    }
+    return render(request, 'tienda/dashboard.html', context)

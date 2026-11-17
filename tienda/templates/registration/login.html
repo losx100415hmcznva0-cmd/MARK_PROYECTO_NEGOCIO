@@ -1,14 +1,31 @@
 {% extends 'base.html' %}
 
-{% block title %}Iniciar Sesión{% endblock %}
+{% block title %}Iniciar Sesión — Papelería Arte y Papel{% endblock %}
 
 {% block content %}
-<div class="card" style="max-width: 400px; margin: 0 auto;">
-    <h2>Iniciar Sesión</h2>
+<div class="card" style="max-width: 420px; margin: 3rem auto; border-top: 5px solid var(--color-primary);">
+    <h2 style="text-align: center; color: var(--color-primary); margin-bottom: 0.5rem;">Papelería Arte y Papel</h2>
+    <p style="text-align: center; color: #64748b; margin-bottom: 1.5rem; font-size: 0.9rem;">Ingresa tus credenciales de acceso al punto de venta</p>
+
+    {% if form.errors %}
+        <div class="messages">
+            <div class="error">Usuario o contraseña incorrectos. Verifica tus datos.</div>
+        </div>
+    {% endif %}
+
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Ingresar</button>
+        <p>
+            <label for="id_username">Usuario:</label>
+            <input type="text" name="username" id="id_username" class="form-control" placeholder="Ej. Mark_XLV" required autofocus>
+        </p>
+        <p>
+            <label for="id_password">Contraseña:</label>
+            <input type="password" name="password" id="id_password" class="form-control" placeholder="••••••••" required>
+        </p>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem; font-size: 1rem;">
+            Entrar al Sistema
+        </button>
     </form>
 </div>
 {% endblock %}

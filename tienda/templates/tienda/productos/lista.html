@@ -1,37 +1,72 @@
 {% extends 'base.html' %}
-{% block title %}Productos{% endblock %}
+
+{% block title %}Catálogo de Productos — Papelería Arte y Papel{% endblock %}
+
 {% block content %}
-<div class="card">
-    <h2>Lista de Productos</h2>
-    {% if user.is_authenticated %}
-        <a href="{% url 'crear_producto' %}" class="btn btn-success">+ Nuevo Producto</a>
-    {% endif %}
-    <table>
-        <thead>
-            <tr><th>ID</th><th>Nombre</th><th>Precio</th><th>Stock</th><th>Categoría</th><th>Activo</th><th>Acciones</th></tr>
-        </thead>
-        <tbody>
-            {% for producto in productos %}
-            <tr>
-                <td>{{ producto.id }}</td>
-                <td>{{ producto.nombre }}</td>
-                <td>${{ producto.precio }}</td>
-                <td>{{ producto.stock }}</td>
-                <td>{{ producto.categoria.nombre }}</td>
-                <td>{% if producto.activo %}Sí{% else %}No{% endif %}</td>
-                <td>
-                    {% if user.is_authenticated %}
-                        <a href="{% url 'editar_producto' producto.pk %}" class="btn btn-warning">Editar</a>
-                        <a href="{% url 'eliminar_producto' producto.pk %}" class="btn btn-danger">Eliminar</a>
-                    {% else %}
-                        <span>Requiere inicio de sesión</span>
-                    {% endif %}
-                </td>
-            </tr>
-            {% empty %}
-            <tr><td colspan="7">No hay productos registrados.</td></tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="color: var(--color-primary);">Catálogo de Papelería</h1>
+        <p style="color: #64748b;">Control de útiles escolares, oficina y material de arte</p>
+    </div>
+    <a href="{% url 'crear_producto' %}" class="btn" style="background: var(--color-secondary); color: var(--color-text);">
+        + Nuevo Artículo
+    </a>
 </div>
+
+<!-- Barra de búsqueda y filtro (Mejora UX 3.4) -->
+<form method="get" class="card" style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; margin-bottom: 1.5rem;">
+    <input type="text" name="q" value="{{ query }}" placeholder="Buscar cuaderno, pluma, lápiz..." class="form-control" style="flex: 2; margin-bottom: 0;">
+    <select name="categoria" class="form-control" style="flex: 1; margin-bottom: 0;">
+        <option value="">Todas las categorías</option>
+        {% for cat in categorias %}
+            <option value="{{ cat.pk }}" {% if categoria_id == cat.pk|stringformat:"s" %}selected{% endif %}>
+                {{ cat.nombre }}
+            </option>
+        {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-primary">Buscar</button>
+    {% if query or categoria_id %}
+        <a href="{% url 'lista_productos' %}" class="btn" style="background: #64748b;">Limpiar</a>
+    {% endif %}
+</form>
+
+{% if productos %}
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.25rem;">
+        {% for producto in productos %}
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; border-top: 4px solid var(--color-primary); margin-bottom: 0;">
+            <div>
+                <span style="background: #EFF6FF; color: var(--color-primary); padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.8rem; font-weight: bold;">
+                    {{ producto.categoria }}
+                </span>
+                <h3 style="margin: 0.6rem 0 0.3rem 0;">{{ producto.nombre }}</h3>
+                <p style="font-size: 1.4rem; font-weight: bold; color: #15803D; margin-bottom: 0.5rem;">
+                    ${{ producto.precio }}
+                </p>
+                <p style="font-size: 0.9rem; color: #475569; margin-bottom: 1rem;">
+                    Existencia: 
+                    <strong style="color: {% if producto.stock <= 5 %}#DC2626{% else %}var(--color-text){% endif %};">
+                        {{ producto.stock }} unidades
+                    </strong>
+                </p>
+            </div>
+            <div style="display: flex; gap: 0.5rem; border-top: 1px solid #e2e8f0; padding-top: 0.75rem;">
+                <a href="{% url 'editar_producto' producto.id %}" class="btn btn-primary" style="flex: 1; text-align: center;">Editar</a>
+                <a href="{% url 'eliminar_producto' producto.id %}" class="btn btn-danger" style="flex: 1; text-align: center;">Borrar</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="card" style="text-align: center; padding: 3rem 1rem;">
+        {% if query or categoria_id %}
+            <h3 style="color: #64748b; margin-bottom: 0.5rem;">No se encontraron artículos con esa búsqueda</h3>
+            <p style="color: #94a3b8; margin-bottom: 1.5rem;">Intenta con otra palabra clave o limpia los filtros aplicados.</p>
+            <a href="{% url 'lista_productos' %}" class="btn btn-primary">Ver todos los productos</a>
+        {% else %}
+            <h3 style="color: #64748b; margin-bottom: 0.5rem;">No hay registros aún en el catálogo</h3>
+            <p style="color: #94a3b8; margin-bottom: 1.5rem;">Comienza agregando cuadernos, lápices, plumas o material de arte.</p>
+            <a href="{% url 'crear_producto' %}" class="btn btn-primary">Registrar primer producto</a>
+        {% endif %}
+    </div>
+{% endif %}
 {% endblock %}
