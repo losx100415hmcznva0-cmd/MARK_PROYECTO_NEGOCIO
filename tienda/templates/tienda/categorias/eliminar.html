@@ -1,24 +1,15 @@
 {% extends 'base.html' %}
 
-{% block title %}Eliminar Categoría — Papelería Arte y Papel{% endblock %}
+{% block title %}Eliminar Categoría{% endblock %}
 
 {% block content %}
-<div class="card" style="max-width: 500px; margin: 2rem auto; border-top: 5px solid #DC2626; text-align: center;">
-    <h2 style="color: #DC2626; margin-bottom: 0.75rem;">⚠️ Eliminar Categoría</h2>
-    <p style="margin-bottom: 1rem;">
-        ¿Estás seguro de que deseas eliminar permanentemente la siguiente categoría de <strong>Papelería Arte y Papel</strong>?
-    </p>
-    <div style="background: #FEE2E2; color: #991B1B; padding: 0.75rem; border-radius: var(--radius); font-weight: bold; margin-bottom: 1.5rem;">
-        "{{ categoria }}"
-    </div>
-    <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.5rem;">
-        Esta acción no se puede deshacer y puede afectar a los productos asociados a ella.
-    </p>
-
-    <form method="post" style="display: flex; justify-content: center; gap: 1rem;">
+<div class="card">
+    <h2>¿Eliminar categoría?</h2>
+    <p>¿Estás seguro de eliminar "<strong>{{ categoria.nombre }}</strong>"?</p>
+    <form method="post">
         {% csrf_token %}
-        <button type="submit" class="btn btn-danger">Sí, Eliminar</button>
-        <a href="{% url 'lista_categorias' %}" class="btn" style="background: #64748b;">Cancelar</a>
+        <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+        <a href="{% url 'lista_categorias' %}" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>
 {% endblock %}

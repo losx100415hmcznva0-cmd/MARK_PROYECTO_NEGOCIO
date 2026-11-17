@@ -142,17 +142,19 @@ def dashboard(request):
     productos_sin_stock = Producto.objects.filter(stock=0).count()
 
     # Valor total del inventario
-    valor_inventario = (
-        Producto.objects.aggregate(total=Sum('precio'))['total'] or 0
-    )
+    valor_inventario = Producto.objects.aggregate(
+        total=Sum('precio')
+    )['total'] or 0
 
     # Últimos 5 productos creados
     ultimos_productos = Producto.objects.order_by('-id')[:5]
 
     # Productos por categoría
-    por_categoria = Categoria.objects.annotate(
-        num_productos=Count('producto')
-    ).order_by('-num_productos')
+    por_categoria = (
+        Categoria.objects
+        .annotate(num_productos=Count('producto'))
+        .order_by('-num_productos')
+    )
 
     context = {
         'total_categorias': total_categorias,

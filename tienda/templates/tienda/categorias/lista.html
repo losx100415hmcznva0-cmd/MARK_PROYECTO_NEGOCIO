@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
+
 {% block title %}Categorías{% endblock %}
+
 {% block content %}
 <div class="card">
     <h2>Lista de Categorías</h2>
-    {% if user.is_authenticated %}
-        <a href="{% url 'crear_categoria' %}" class="btn btn-success">+ Nueva Categoría</a>
-    {% endif %}
+    <a href="{% url 'crear_categoria' %}" class="btn btn-success">+ Nueva Categoría</a>
     <table>
         <thead>
             <tr><th>ID</th><th>Nombre</th><th>Descripción</th><th>Acciones</th></tr>
@@ -17,12 +17,8 @@
                 <td>{{ categoria.nombre }}</td>
                 <td>{{ categoria.descripcion|default:"-" }}</td>
                 <td>
-                    {% if user.is_authenticated %}
-                        <a href="{% url 'editar_categoria' categoria.pk %}" class="btn btn-warning">Editar</a>
-                        <a href="{% url 'eliminar_categoria' categoria.pk %}" class="btn btn-danger">Eliminar</a>
-                    {% else %}
-                        <span>Requiere inicio de sesión</span>
-                    {% endif %}
+                    <a href="{% url 'editar_categoria' categoria.pk %}" class="btn btn-warning">Editar</a>
+                    <a href="{% url 'eliminar_categoria' categoria.pk %}" class="btn btn-danger">Eliminar</a>
                 </td>
             </tr>
             {% empty %}
