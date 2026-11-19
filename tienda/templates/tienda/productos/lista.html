@@ -1,41 +1,45 @@
 {% extends 'base.html' %}
-
-{% block title %}Productos{% endblock %}
-
+{% block title %}Productos - Arte y Papel{% endblock %}
 {% block content %}
-<div class="card">
-    <h2>Lista de Productos</h2>
-    <a href="{% url 'crear_producto' %}" class="btn btn-success">+ Nuevo Producto</a>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Precio</th>
-                <th>Stock</th>
-                <th>Categoría</th>
-                <th>Activo</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for producto in productos %}
-            <tr>
-                <td>{{ producto.id }}</td>
-                <td>{{ producto.nombre }}</td>
-                <td>${{ producto.precio }}</td>
-                <td>{{ producto.stock }}</td>
-                <td>{{ producto.categoria.nombre }}</td>
-                <td>{% if producto.activo %}Sí{% else %}No{% endif %}</td>
-                <td>
-                    <a href="{% url 'editar_producto' producto.pk %}" class="btn btn-warning">Editar</a>
-                    <a href="{% url 'eliminar_producto' producto.pk %}" class="btn btn-danger">Eliminar</a>
-                </td>
-            </tr>
-            {% empty %}
-            <tr><td colspan="7">No hay productos registrados.</td></tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div class="page-header">
+    <h2>Catálogo de productos</h2>
+    <a href="{% url 'crear_producto' %}" class="btn btn-success">+ Nuevo producto</a>
 </div>
+
+{% if productos %}
+<div class="product-grid">
+    {% for producto in productos %}
+    <article class="product-card {% if producto.activo %}activo{% else %}inactivo{% endif %}">
+        <div class="product-top">
+            <span class="product-category">{{ producto.categoria.nombre }}</span>
+            {% if producto.activo %}
+                <span class="badge badge-success">Activo</span>
+            {% else %}
+                <span class="badge badge-error">Inactivo</span>
+            {% endif %}
+        </div>
+        <span class="product-id">ID: {{ producto.id }}</span>
+        <h3 class="product-name">{{ producto.nombre }}</h3>
+        <p class="product-price">${{ producto.precio }}</p>
+        <p class="product-stock">
+            Stock: {{ producto.stock }}
+            {% if producto.stock == 0 %}
+                <span class="badge badge-error">Agotado</span>
+            {% elif producto.stock <= 10 %}
+                <span class="badge badge-warning">Pocas piezas</span>
+            {% endif %}
+        </p>
+        <div class="product-actions">
+            <a href="{% url 'editar_producto' producto.pk %}" class="btn btn-warning">Editar</a>
+            <a href="{% url 'eliminar_producto' producto.pk %}" class="btn btn-danger">Eliminar</a>
+        </div>
+    </article>
+    {% endfor %}
+</div>
+{% else %}
+<div class="card empty-state">
+    <p>No hay productos registrados aún.</p>
+    <a href="{% url 'crear_producto' %}" class="btn btn-success">Agregar el primer producto</a>
+</div>
+{% endif %}
 {% endblock %}

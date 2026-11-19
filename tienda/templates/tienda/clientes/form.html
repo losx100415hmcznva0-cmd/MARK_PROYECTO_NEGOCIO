@@ -1,7 +1,5 @@
 {% extends 'base.html' %}
-
 {% block title %}{{ titulo }}{% endblock %}
-
 {% block content %}
 <div class="card">
     <h2>{{ titulo }}</h2>
@@ -9,7 +7,7 @@
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-success">Guardar</button>
-        <a href="{% url 'lista_clientes' %}" class="btn btn-secondary">Cancelar</a>
+        <a href="{% url 'lista_clientes' %}" class="btn btn-neutral">Cancelar</a>
     </form>
 </div>
 {% endblock %}
