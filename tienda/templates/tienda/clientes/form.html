@@ -1,13 +1,47 @@
 {% extends 'base.html' %}
-{% block title %}{{ titulo }}{% endblock %}
+{% block title %}{{ titulo }} - Arte y Papel{% endblock %}
 {% block content %}
-<div class="card">
-    <h2>{{ titulo }}</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-success">Guardar</button>
-        <a href="{% url 'lista_clientes' %}" class="btn btn-neutral">Cancelar</a>
-    </form>
+<div class="login-wrapper">
+    <div class="card" style="width: 100%; max-width: 600px; border-top: 4px solid var(--color-secondary);">
+        <h2 style="color: var(--color-primary);">{{ titulo }}</h2>
+        <p class="small" style="color: #475569; margin-bottom: 1.25rem;">Registra clientes frecuentes, escuelas o empresas para pedidos y cotizaciones.</p>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <p>
+                <label for="{{ form.nombre.id_for_label }}">Nombre completo o razón social</label>
+                {{ form.nombre }}
+                <small class="small" style="color: #475569;">{{ form.nombre.help_text|default:"Nombre del cliente, escuela o despacho." }}</small>
+                {% for error in form.nombre.errors %}<span class="message error" style="display: block; margin-top: 4px;">{{ error }}</span>{% endfor %}
+            </p>
+
+            <p>
+                <label for="{{ form.email.id_for_label }}">Correo electrónico</label>
+                {{ form.email }}
+                <small class="small" style="color: #475569;">{{ form.email.help_text|default:"Para envío de cotizaciones o comprobantes." }}</small>
+                {% for error in form.email.errors %}<span class="message error" style="display: block; margin-top: 4px;">{{ error }}</span>{% endfor %}
+            </p>
+
+            <p>
+                <label for="{{ form.telefono.id_for_label }}">Teléfono de contacto</label>
+                {{ form.telefono }}
+                <small class="small" style="color: #475569;">{{ form.telefono.help_text|default:"Número a 10 dígitos para avisos de pedidos." }}</small>
+                {% for error in form.telefono.errors %}<span class="message error" style="display: block; margin-top: 4px;">{{ error }}</span>{% endfor %}
+            </p>
+
+            <p>
+                <label for="{{ form.direccion.id_for_label }}">Dirección de entrega o facturación</label>
+                {{ form.direccion }}
+                <small class="small" style="color: #475569;">{{ form.direccion.help_text|default:"Calle, número, colonia y referencias para entregas a domicilio." }}</small>
+                {% for error in form.direccion.errors %}<span class="message error" style="display: block; margin-top: 4px;">{{ error }}</span>{% endfor %}
+            </p>
+
+            <div style="margin-top: 1.25rem; display: flex; gap: 0.5rem;">
+                <button type="submit" class="btn btn-success">Guardar cliente</button>
+                <a href="{% url 'lista_clientes' %}" class="btn btn-neutral">Cancelar</a>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}

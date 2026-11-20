@@ -1,13 +1,61 @@
 {% extends 'base.html' %}
-{% block title %}{{ titulo }}{% endblock %}
+{% block title %}{{ titulo }} - Arte y Papel{% endblock %}
 {% block content %}
-<div class="card">
-    <h2>{{ titulo }}</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-success">Guardar</button>
-        <a href="{% url 'lista_productos' %}" class="btn btn-neutral">Cancelar</a>
-    </form>
+<div class="login-wrapper">
+    <div class="card" style="width: 100%; max-width: 600px; border-top: 4px solid var(--color-secondary);">
+        <h2 style="color: var(--color-primary);">{{ titulo }}</h2>
+        <p class="small" style="color: #475569; margin-bottom: 1.25rem;">Completa los datos del artículo para el catálogo de la papelería.</p>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <p>
+                <label for="{{ form.nombre.id_for_label }}">Nombre del producto</label>
+                {{ form.nombre }}
+                <small class="small" style="color: #475569;">{{ form.nombre.help_text|default:"Ej. Cuaderno Profesional Norma 100 hojas, Caja de colores Prismacolor." }}</small>
+                {% for error in form.nombre.errors %}<span class="message error" style="display: block; margin-top: 4px;">{{ error }}</span>{% endfor %}
+            </p>
+
+            <p>
+                <label for="{{ form.descripcion.id_for_label }}">Descripción y características</label>
+                {{ form.descripcion }}
+                <small class="small" style="color: #475569;">{{ form.descripcion.help_text|default:"Especifica marca, tamaño, gramaje, color o presentación del artículo." }}</small>
+                {% for error in form.descripcion.errors %}<span class="message error" style="display: block; margin-top: 4px;">{{ error }}</span>{% endfor %}
+            </p>
+
+            <p>
+                <label for="{{ form.precio.id_for_label }}">Precio de venta ($ MXN)</label>
+                {{ form.precio }}
+                <small class="small" style="color: #475569;">{{ form.precio.help_text|default:"Precio unitario al público con IVA incluido." }}</small>
+                {% for error in form.precio.errors %}<span class="message error" style="display: block; margin-top: 4px;">{{ error }}</span>{% endfor %}
+            </p>
+
+            <p>
+                <label for="{{ form.stock.id_for_label }}">Existencias (Stock)</label>
+                {{ form.stock }}
+                <small class="small" style="color: #475569;">{{ form.stock.help_text|default:"Unidades disponibles en tienda (avisa si hay 10 o menos)." }}</small>
+                {% for error in form.stock.errors %}<span class="message error" style="display: block; margin-top: 4px;">{{ error }}</span>{% endfor %}
+            </p>
+
+            <p>
+                <label for="{{ form.categoria.id_for_label }}">Categoría</label>
+                {{ form.categoria }}
+                <small class="small" style="color: #475569;">{{ form.categoria.help_text|default:"Clasifica el artículo (ej. Escritura, Papel y Cuadernos, Arte y Dibujo)." }}</small>
+                {% for error in form.categoria.errors %}<span class="message error" style="display: block; margin-top: 4px;">{{ error }}</span>{% endfor %}
+            </p>
+
+            <p style="background: #f1f5f9; padding: 0.75rem; border-radius: 6px;">
+                <label for="{{ form.activo.id_for_label }}" style="display: flex; align-items: center; gap: 8px; margin-bottom: 0; cursor: pointer;">
+                    {{ form.activo }} Producto activo en catálogo
+                </label>
+                <small class="small" style="color: #475569;">Desmarca esta casilla si el artículo está descontinuado temporalmente.</small>
+            </p>
+
+            <div style="margin-top: 1.25rem; display: flex; gap: 0.5rem;">
+                <button type="submit" class="btn btn-success">Guardar producto</button>
+                <a href="{% url 'lista_productos' %}" class="btn btn-neutral">Cancelar</a>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}
