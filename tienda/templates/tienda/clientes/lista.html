@@ -1,12 +1,23 @@
 {% extends 'base.html' %}
-{% block title %}Clientes{% endblock %}
+{% block title %}Clientes - Arte y Papel{% endblock %}
 {% block content %}
-<div class="card">
+<div class="page-header">
     <h2>Lista de Clientes</h2>
     <a href="{% url 'crear_cliente' %}" class="btn btn-success">+ Nuevo Cliente</a>
+</div>
+
+{% if clientes %}
+<div class="card">
     <table>
         <thead>
-            <tr><th>ID</th><th>Nombre</th><th>Email</th><th>Teléfono</th><th>Dirección</th><th>Acciones</th></tr>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Dirección</th>
+                <th>Acciones</th>
+            </tr>
         </thead>
         <tbody>
             {% for cliente in clientes %}
@@ -21,10 +32,14 @@
                     <a href="{% url 'eliminar_cliente' cliente.pk %}" class="btn btn-danger">Eliminar</a>
                 </td>
             </tr>
-            {% empty %}
-            <tr><td colspan="6">No hay clientes registrados.</td></tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
+{% else %}
+<div class="card empty-state">
+    <p>No hay clientes registrados aún.</p>
+    <a href="{% url 'crear_cliente' %}" class="btn btn-success">Agregar el primer cliente</a>
+</div>
+{% endif %}
 {% endblock %}

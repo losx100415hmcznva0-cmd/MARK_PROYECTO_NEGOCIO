@@ -1,12 +1,21 @@
 {% extends 'base.html' %}
-{% block title %}Categorías{% endblock %}
+{% block title %}Categorías - Arte y Papel{% endblock %}
 {% block content %}
-<div class="card">
+<div class="page-header">
     <h2>Lista de Categorías</h2>
     <a href="{% url 'crear_categoria' %}" class="btn btn-success">+ Nueva Categoría</a>
+</div>
+
+{% if categorias %}
+<div class="card">
     <table>
         <thead>
-            <tr><th>ID</th><th>Nombre</th><th>Descripción</th><th>Acciones</th></tr>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Acciones</th>
+            </tr>
         </thead>
         <tbody>
             {% for categoria in categorias %}
@@ -19,10 +28,14 @@
                     <a href="{% url 'eliminar_categoria' categoria.pk %}" class="btn btn-danger">Eliminar</a>
                 </td>
             </tr>
-            {% empty %}
-            <tr><td colspan="4">No hay categorías registradas.</td></tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
+{% else %}
+<div class="card empty-state">
+    <p>No hay categorías registradas aún.</p>
+    <a href="{% url 'crear_categoria' %}" class="btn btn-success">Agregar la primera categoría</a>
+</div>
+{% endif %}
 {% endblock %}
