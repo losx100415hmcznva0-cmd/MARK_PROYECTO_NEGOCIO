@@ -7,26 +7,4 @@
     <h2>Bienvenido a Papeleria Arte y Papel</h2>
     <p>Software que crece con tu negocio.</p>
 </div>
-
-<div class="card">
-    <h3>Categorías</h3>
-    <ul>
-        {% for categoria in categorias %}
-            <li>{{ categoria.nombre }}</li>
-        {% empty %}
-            <li>No hay categorías registradas.</li>
-        {% endfor %}
-    </ul>
-</div>
-
-<div class="card">
-    <h3>Productos Activos</h3>
-    <ul>
-        {% for producto in productos %}
-            <li>{{ producto.nombre }} - ${{ producto.precio }} (Stock: {{ producto.stock }})</li>
-        {% empty %}
-            <li>No hay productos activos.</li>
-        {% endfor %}
-    </ul>
-</div>
 {% endblock %}
